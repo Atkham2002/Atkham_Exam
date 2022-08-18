@@ -27,8 +27,8 @@ public class ServiceImpl implements Service {
 
         List<ValidatorDto> errors = validatorService.validator(bookDto);
 
-        if (!validatorService.validator(bookDto).isEmpty()){
-            return ResponseDto.builder().success(false).code(-3).data(errors).build();
+        if (!errors.isEmpty()){
+            return ResponseDto.builder().success(false).code(-3).errors(errors).build();
         }
 
         Book book = bookMapper.toBook(bookDto);
