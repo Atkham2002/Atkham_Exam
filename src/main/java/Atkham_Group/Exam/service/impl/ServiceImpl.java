@@ -4,10 +4,14 @@ import Atkham_Group.Exam.Entity.Book;
 import Atkham_Group.Exam.Repository.BookRepository;
 import Atkham_Group.Exam.dto.BookDto;
 import Atkham_Group.Exam.dto.ResponseDto;
+import Atkham_Group.Exam.dto.ValidatorDto;
 import Atkham_Group.Exam.service.Service;
 import Atkham_Group.Exam.service.ValidatorService;
 import Atkham_Group.Exam.service.mapper.BookMapper;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -21,8 +25,11 @@ public class ServiceImpl implements Service {
     @Override
     public ResponseDto addBook(BookDto bookDto) {
 
+        List<ValidatorDto> errors = validatorService.validator(bookDto);
 
-
+        if (!validatorService.validator(bookDto).isEmpty()){
+            return ResponseDto.builder().success(false).code(-3).data(errors).build();
+        }
 
         Book book = bookMapper.toBook(bookDto);
         bookRepository.save(book);
